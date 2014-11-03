@@ -1,7 +1,5 @@
 .deps
 BotLib.xcodeproj
 botlib_test
-
 *.a
-
 *.o
