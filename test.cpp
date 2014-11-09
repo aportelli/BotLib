@@ -26,8 +26,8 @@ using namespace BotLib;
 
 int main(void)
 {
-    Device device;
-    Motor  motor(device, OutPort::A);
+    Robot robot;
+    Motor  motor(robot, OutPort::A);
 
     cout << "-- testing motor on port A..." << endl;
     for (int p = 10; p <= 100; p += 10)
@@ -38,5 +38,5 @@ int main(void)
     }
     motor.stop();
 
-	return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }

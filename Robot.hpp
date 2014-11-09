@@ -1,5 +1,5 @@
 /*
- * Motor.hpp, part of BotLib
+ * Robot.hpp, part of BotLib
  *
  * Copyright (C) 2014 Antonin Portelli
  *
@@ -17,36 +17,30 @@
  * along with BotLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BotLib_Motor_hpp_
-#define BotLib_Motor_hpp_
+#ifndef BotLib_Robot_hpp_
+#define BotLib_Robot_hpp_
 
 #include <BotLib/Global.hpp>
-#include <BotLib/Device.hpp>
 
 BEGIN_NAMESPACE
 
 /******************************************************************************
- *                               Motor                                        *
+ *                                 Robot                                     *
  ******************************************************************************/
 
-class Motor: public Device
+class Robot
 {
 public:
     // constructor
-    Motor(const Robot &robot, const byte port);
+    Robot(void);
     // destructor
-    virtual ~Motor(void) = default;
-    // IO
-    void start(const byte power);
-    void stop(void);
+    virtual ~Robot(void);
+    // access
+    int getPwmFd(void) const;
 private:
-    // IO
-    void execute(const byte command);
-    void execute(const byte command, const byte arg);
-private:
-    byte command_[3];
+    int pwmFd_;
 };
 
 END_NAMESPACE
 
-#endif // BotLib_Motor_hpp_
+#endif // BotLib_Robot_hpp_

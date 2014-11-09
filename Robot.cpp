@@ -1,5 +1,5 @@
 /*
- * Motor.cpp, part of BotLib
+ * Robot.cpp, part of BotLib
  *
  * Copyright (C) 2014 Antonin Portelli
  *
@@ -17,41 +17,29 @@
  * along with BotLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BotLib/Motor.hpp>
+#include <BotLib/Robot.hpp>
 #include <BotLib/includes.hpp>
 
 using namespace std;
 using namespace BotLib;
 
 /******************************************************************************
- *                         Motor implementation                               *
+ *                         Robot implementation                              *
  ******************************************************************************/
 // constructor /////////////////////////////////////////////////////////////////
-Motor::Motor(const Robot &robot, const byte port)
-: Device(robot, port)
-{}
-
-// IO //////////////////////////////////////////////////////////////////////////
-void Motor::start(const byte power)
+Robot::Robot(void)
 {
-    execute(opOUTPUT_POWER, power);
-    execute(opOUTPUT_START);
+    pwmFd_ = open(PWM_DEVICE_NAME, O_WRONLY);
 }
 
-void Motor::stop(void)
+// destructor //////////////////////////////////////////////////////////////////
+Robot::~Robot(void)
 {
-    execute(opOUTPUT_STOP);
+    close(pwmFd_);
 }
 
-void Motor::execute(const byte command)
+// access //////////////////////////////////////////////////////////////////////
+int Robot::getPwmFd(void) const
 {
-    command_[0] = command;
-    write(getRobot().getPwmFd(), command_, 2);
-}
-
-void Motor::execute(const byte command, const byte arg)
-{
-    command_[0] = command;
-    command_[2] = arg;
-    write(getRobot().getPwmFd(), command_, 3);
+    return pwmFd_;
 }

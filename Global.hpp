@@ -40,6 +40,19 @@ public:
     };
 };
 
+class InPort
+{
+public:
+    enum: byte
+    {
+        nothing = 0,
+        P1      = 0,
+        P2      = 1,
+        P3      = 2,
+        P4      = 3
+    };
+};
+
 END_NAMESPACE
 
 #endif // BotLib_Global_hpp_

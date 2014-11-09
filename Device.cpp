@@ -24,22 +24,26 @@ using namespace std;
 using namespace BotLib;
 
 /******************************************************************************
- *                         Device implementation                              *
+ *                          Device implementation                             *
  ******************************************************************************/
 // constructor /////////////////////////////////////////////////////////////////
-Device::Device(void)
-{
-    pwmFd_ = open(PWM_DEVICE_NAME, O_WRONLY);
-}
-
-// destructor //////////////////////////////////////////////////////////////////
-Device::~Device(void)
-{
-    close(pwmFd_);
-}
+Device::Device(const Robot &robot, const byte port)
+: robot_(robot)
+, port_(port)
+{}
 
 // access //////////////////////////////////////////////////////////////////////
-int Device::getPwmFd(void) const
+byte Device::getPort(void) const
 {
-    return pwmFd_;
+    return port_;
+}
+
+void Device::setPort(const byte port)
+{
+    port_ = port;
+}
+
+const Robot & Device::getRobot(void)
+{
+    return robot_;
 }

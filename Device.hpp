@@ -21,6 +21,7 @@
 #define BotLib_Device_hpp_
 
 #include <BotLib/Global.hpp>
+#include <BotLib/Robot.hpp>
 
 BEGIN_NAMESPACE
 
@@ -32,13 +33,17 @@ class Device
 {
 public:
     // constructor
-    Device(void);
+    Device(const Robot &robot, const byte port);
     // destructor
-    virtual ~Device(void);
+    virtual ~Device(void) = default;
     // access
-    int getPwmFd(void) const;
+    byte getPort(void) const;
+    void setPort(const byte port);
+protected:
+    const Robot & getRobot(void);
 private:
-    int pwmFd_;
+    const Robot &robot_;
+    byte        port_;
 };
 
 END_NAMESPACE
