@@ -1,5 +1,5 @@
 /*
- * Robot.hpp, part of BotLib
+ * UartSensor.hpp, part of BotLib
  *
  * Copyright (C) 2014 Antonin Portelli
  *
@@ -17,33 +17,33 @@
  * along with BotLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BotLib_Robot_hpp_
-#define BotLib_Robot_hpp_
+#ifndef BotLib_UartSensor_hpp_
+#define BotLib_UartSensor_hpp_
 
 #include <BotLib/Global.hpp>
+#include <BotLib/Device.hpp>
 
 BEGIN_NAMESPACE
 
 /******************************************************************************
- *                                 Robot                                     *
+ *                               UartSensor                                   *
  ******************************************************************************/
-
-class Robot
+class UartSensor: public Device
 {
 public:
     // constructor
-    Robot(void);
+    UartSensor(const Robot &robot, const byte port);
     // destructor
-    virtual ~Robot(void);
+    virtual ~UartSensor(void) = default;
     // access
-    int getPwmFd(void) const;
-    int getUartFd(void) const;
+    void         configure(const sbyte connection, const sbyte type,
+                           const sbyte mode);
+    unsigned int readRaw(void) const;
 private:
-    int open(const std::string name, const int mode);
-private:
-    int pwmFd_, uartFd_;
+    UART *uart_;
+    DEVCON dev;
 };
 
 END_NAMESPACE
 
-#endif // BotLib_Robot_hpp_
+#endif // BotLib_UartSensor_hpp_

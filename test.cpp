@@ -20,14 +20,16 @@
 #include <iostream>
 #include <unistd.h>
 #include <BotLib/Motor.hpp>
+#include <BotLib/UartSensor.hpp>
 
 using namespace std;
 using namespace BotLib;
 
 int main(void)
 {
-    Robot robot;
-    Motor  motor(robot, OutPort::A);
+    Robot      robot;
+    Motor      motor(robot, OutPort::A);
+    UartSensor sensor(robot, InPort::P1);
 
     cout << "-- testing motor on port A..." << endl;
     for (int p = 10; p <= 100; p += 10)
@@ -37,6 +39,13 @@ int main(void)
         sleep(1);
     }
     motor.stop();
+
+    cout << "-- reading sensor on port 1..." << endl;
+    for (int i = 0; i < 100; ++i)
+    {
+        cout << "value= " << sensor.readRaw() << endl;
+        sleep(1);
+    }
 
     return EXIT_SUCCESS;
 }

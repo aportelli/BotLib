@@ -24,10 +24,10 @@ LMSASM   = $(JAVA) -jar assembler.jar
 NAME = BotLib
 
 # source list
-SRCS = Device.cpp Motor.cpp Robot.cpp
+SRCS = Device.cpp Exceptions.cpp Motor.cpp Robot.cpp UartSensor.cpp
 
 # header list
-HEAD = Device.hpp Global.hpp Motor.hpp Robot.hpp
+HEAD = Device.hpp Exceptions.hpp Global.hpp Motor.hpp Robot.hpp UartSensor.hpp
 
 # programs
 PROG = botlib_test
@@ -42,8 +42,8 @@ OBJ = $(SRCS:%.cpp=%.o)
 # Lego VM programs
 LMSPROG = $(PROG:%=%.rbf)
 
-# LMS2012 headers
-CXXFLAGS += -I $(PWD)/lms2012 -I $(PWD)/..
+# header path
+CXXFLAGS += -I $(PWD)/..
 
 # dependencies location
 DEPDIR = .deps
@@ -91,6 +91,8 @@ distclean: clean
 install:
 	mkdir -p $(PREFIX)/include/$(NAME)
 	install $(HEAD) $(PREFIX)/include/$(NAME)
+	mkdir -p $(PREFIX)/include/$(NAME)/lms2012
+	install $(PWD)/lms2012/*.h $(PREFIX)/include/$(NAME)/lms2012
 	mkdir -p $(PREFIX)/lib
 	install $(LIBNAME) $(PREFIX)/lib
 	[ -d $(SDCARD)/bin ]    && (install $(PROG) $(SDCARD)/bin) || true

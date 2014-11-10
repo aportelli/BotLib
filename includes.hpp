@@ -22,7 +22,8 @@
 
 #include <cmath>
 #include <fcntl.h>
-#include <lms2012.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
+#include <sys/mman.h>
 
 #endif // BotLib_includes_hpp_

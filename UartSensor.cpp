@@ -1,5 +1,5 @@
 /*
- * Robot.cpp, part of BotLib
+ * UartSensor.cpp, part of BotLib
  *
  * Copyright (C) 2014 Antonin Portelli
  *
@@ -17,50 +17,43 @@
  * along with BotLib.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <BotLib/Robot.hpp>
+#include <BotLib/UartSensor.hpp>
 #include <BotLib/includes.hpp>
 
 using namespace std;
 using namespace BotLib;
 
 /******************************************************************************
- *                          Robot implementation                              *
+ *                       UartSensor implementation                            *
  ******************************************************************************/
 // constructor /////////////////////////////////////////////////////////////////
-Robot::Robot(void)
+UartSensor::UartSensor(const Robot &robot, const byte port)
+: Device(robot, port)
 {
-    pwmFd_  = open(PWM_DEVICE_NAME, O_WRONLY);
-    uartFd_ = open(UART_DEVICE_NAME, O_RDWR|O_SYNC);
-}
-
-// destructor //////////////////////////////////////////////////////////////////
-Robot::~Robot(void)
-{
-    close(pwmFd_);
-    close(uartFd_);
+    uart_ = (UART*)mmap(0, sizeof(UART), PROT_READ|PROT_WRITE,
+                        MAP_FILE|MAP_SHARED, getRobot().getUartFd(), 0);
+    if (uart_ == MAP_FAILED)
+    {
+        BOTLIB_ERROR(System, "UART device map failed");
+    }
 }
 
 // access //////////////////////////////////////////////////////////////////////
-int Robot::getPwmFd(void) const
+unsigned int UartSensor::readRaw(void) const
 {
-    return pwmFd_;
+    unsigned int p = static_cast<unsigned int>(getPort());
+
+    return static_cast<unsigned int>(uart_->Raw[p][uart_->Actual[p]][0]);
 }
 
-int Robot::getUartFd(void) const
+void UartSensor::configure(const sbyte connection, const sbyte type,
+                           const sbyte mode)
 {
-    return uartFd_;
-}
+    unsigned int p = static_cast<unsigned int>(getPort());
+    DEVCON       conf;
 
-// IO //////////////////////////////////////////////////////////////////////////
-int Robot::open(const std::string name, const int mode)
-{
-    int fd;
-
-    fd = ::open(name.c_str(), mode);
-    if (fd == -1)
-    {
-        BOTLIB_ERROR(System, "impossible to open device '" + name + "'");
-    }
-
-    return fd;
+    conf.Connection[p] = connection;
+    conf.Type[p]       = type;
+    conf.Mode[p]       = mode;
+    ioctl(getRobot().getUartFd(), UART_SET_CONN, &conf);
 }
